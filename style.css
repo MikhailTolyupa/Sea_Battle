@@ -1,0 +1,35 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+.wrap{
+    height: 800px;
+    background-color: rgb(218, 211, 211);
+    margin: 0 auto;
+    padding-top: 50px;
+}
+.title{
+    text-align: center;
+}
+.game_area{
+    margin: 0 auto;
+    width: 700px;
+    display: flex;
+    justify-content: space-between;
+    padding-top: 50px;
+}
+table {
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+ /* границы ячеек первого ряда таблицы */
+th, td {
+    border: 1px solid grey;
+    width: 30px;
+    height: 30px;
+}
+/* границы ячеек тела таблицы */
+h2{
+    text-align: center;
+}
