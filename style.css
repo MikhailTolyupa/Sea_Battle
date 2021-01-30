@@ -23,13 +23,18 @@ table {
     border-collapse: collapse;
     margin-top: 20px;
 }
- /* границы ячеек первого ряда таблицы */
 th, td {
     border: 1px solid grey;
     width: 30px;
     height: 30px;
 }
-/* границы ячеек тела таблицы */
 h2{
     text-align: center;
+}
+button{
+    height: 20px;
+    margin-top: 20px;
+}
+.coord{
+    border: none;
 }

@@ -1,44 +1,39 @@
-var shipsVariants = [4, 3, 3, 2, 2, 2, 1, 1, 1, 1];
+var isGameNow = false;
+var gamersCount = 0; //счетчики
+var computersCount = 0;
+var countToWin = 20; // количество всех палуб
+
 var gamersField = createBattleField();
 var computersField = createBattleField();
-
-shipsVariants.forEach(function(item){
-    // addShipToField(createShip(item), gamersField);
-});
-
+//создадим враианты кораблей
 var testShip1 = createShip(1);
-var testShip11 = createShip(1);
-var testShip111 = createShip(1);
-var testShip1111 = createShip(1);
 var testShip2 = createShip(2);
-var testShip22 = createShip(2);
-var testShip222 = createShip(2);
 var testShip3 = createShip(3);
-var testShip33 = createShip(3);
 var testShip4 = createShip(4);
-
+//добавим корабли на поле
 addShipToField(testShip1, gamersField);
-addShipToField(testShip11, gamersField);
-addShipToField(testShip111, gamersField);
-addShipToField(testShip1111, gamersField);
+addShipToField(testShip1, gamersField);
+addShipToField(testShip1, gamersField);
+addShipToField(testShip1, gamersField);
 addShipToField(testShip2, gamersField);
-addShipToField(testShip22, gamersField);
-addShipToField(testShip222, gamersField);
+addShipToField(testShip2, gamersField);
+addShipToField(testShip2, gamersField);
 addShipToField(testShip3, gamersField);
-addShipToField(testShip33, gamersField);
+addShipToField(testShip3, gamersField);
 addShipToField(testShip4, gamersField);
-console.log(gamersField);
-let bb = document.getElementsByTagName('div');
 
-// bb.forEach(function(item){
-     // item.bgColor = 'blue';
-// });
-let aa = document.getElementById("ddd");
-console.log(bb);
-// document.getElementById('55').style.backgroundColor = '#FF0000';
+addShipToField(testShip1, computersField);
+addShipToField(testShip1, computersField);
+addShipToField(testShip1, computersField);
+addShipToField(testShip1, computersField);
+addShipToField(testShip2, computersField);
+addShipToField(testShip2, computersField);
+addShipToField(testShip2, computersField);
+addShipToField(testShip3, computersField);
+addShipToField(testShip3, computersField);
+addShipToField(testShip4, computersField);
 
-
-function createShip(decksNumber){ 
+function createShip(decksNumber){ //функция создания корабля
     return{
         decksNumber,
         orientation: [random_0_or_1(), random_0_or_1()], // 0 - вертикально, 1 - горизонтально, 0 - влево/вниз строим, 1 вправо/вверх строим
@@ -58,6 +53,7 @@ function createBattleField(){ // создаём матрицу - поле боя
 }
 
 function addShipToField(ship, field){
+    // функция добавления корабля на поле боя. Рассматриваем варианты рандомной расстановки
     let shipLength = ship.decksNumber;
     let isShipAdded = false;
     while (!isShipAdded){
@@ -67,10 +63,11 @@ function addShipToField(ship, field){
         console.log(j);
         if (field[i][j] == 0){
             if (ship.orientation[0] == 1){
-                if(ship.orientation[1] == 1){ //вправо
+                if(ship.orientation[1] == 1){ //строим корабль вправо
                     console.log("right");
                     //проверяем наличие недоступной зоны
                     let isValidZone = true;
+                    //узнаем, можно ли в выбранной точке [i][j] строить корабль в выбранном направлении
                     for (let k = i - 1; k <= i + 1; k++){ // со строки сверху до строки снизу
                         for (let l = j - 1; l <= j + shipLength; l++){ // со столбца слева от коробля до столбца справа от коробля
                             if((j + shipLength > 10) || k >= 0 && l >= 0 && k < 10 && l < 10 && field[k][l] == 1) 
@@ -84,18 +81,19 @@ function addShipToField(ship, field){
                         isShipAdded = true;
                         for (let k = i - 1; k <= i + 1; k++){ //опять идём по этим клеткам и расставляем 2 (недоступная зона)
                             for (let l = j - 1; l <= j + shipLength; l++){
-                                k >= 0 && l >= 0 && k < 10 && l < 10 && field[k][l] != 1 && (field[k][l] = 2); // наверное проверку можно убрать
+                                k >= 0 && l >= 0 && k < 10 && l < 10 && field[k][l] != 1 && (field[k][l] = 2);
                             }
                         }
                     }
                 }
-                else{ // влево
+                else{ // строим корабль влево
                     console.log("left");
                     let isValidZone = true;
+                    //узнаем, можно ли в выбранной точке [i][j] строить корабль в выбранном направлении
                     for (let k = i - 1; k <= i + 1; k++){ // со строки сверху до строки снизу
                         for (let l = j + 1; l >= j - shipLength; l--){ // со столбца справа от коробля до столбца слева от коробля
                             if((j - shipLength < 0) || k >= 0 && l >= 0 && k < 10 && l < 10 && field[k][l] == 1)
-                                isValidZone = false; //неоптимально, но некритично
+                                isValidZone = false;
                         }
                     }
                     if (isValidZone){ // если всё ок, то строим корабль (влево) и недоступную зону вокруг него
@@ -105,20 +103,21 @@ function addShipToField(ship, field){
                         isShipAdded = true;
                         for (let k = i - 1; k <= i + 1; k++){ //опять идём по этим клеткам и расставляем 2 (недоступная зона)
                             for (let l = j + 1; l >= j - shipLength; l--){
-                                k >= 0 && l >= 0 && k < 10 && l < 10 && field[k][l] != 1 && (field[k][l] = 2); // наверное проверку можно убрать
+                                k >= 0 && l >= 0 && k < 10 && l < 10 && field[k][l] != 1 && (field[k][l] = 2);
                             }
                         }
                     }
                 }
             }
             else{ // k - строка, l - столбец
-                if(ship.orientation[1] == 0){ // вниз
+                if(ship.orientation[1] == 0){ // строим корабль вниз
                     console.log("down");
                     let isValidZone = true;
+                    //узнаем, можно ли в выбранной точке [i][j] строить корабль в выбранном направлении
                     for (let l = j - 1; l <= j + 1; l++){ // со столбца слева до столбца справа
-                        for (let k = i - 1; k <= i + shipLength; k++){ 
+                        for (let k = i - 1; k <= i + shipLength; k++){  // со строки сверху от корабля до строки снизу от корабля
                             if((i + shipLength > 10) || k >= 0 && l >= 0 && k < 10 && l < 10 && field[k][l] == 1)
-                                isValidZone = false; //неоптимально, но некритично
+                                isValidZone = false;
                         }
                     }
                     if (isValidZone){ // если всё ок, то строим корабль (вниз) и недоступную зону вокруг него
@@ -128,19 +127,20 @@ function addShipToField(ship, field){
                         isShipAdded = true;
                         for (let l = j - 1; l <= j + 1; l++){
                             for (let k = i - 1; k <= i + shipLength; k++){ //опять идём по этим клеткам и расставляем 2 (недоступная зона)
-                                k >= 0 && l >= 0 && k < 10 && l < 10 && field[k][l] != 1 && (field[k][l] = 2); // наверное проверку можно убрать
+                                k >= 0 && l >= 0 && k < 10 && l < 10 && field[k][l] != 1 && (field[k][l] = 2);
                             }
                         }
                     }
                 }
                 else{ // k - строка, l - столбец
-                    // вверх
+                    // строим корабль вверх
                     console.log("up");
                     let isValidZone = true;
+                    //узнаем, можно ли в выбранной точке [i][j] строить корабль в выбранном направлении
                     for (let l = j - 1; l <= j + 1; l++){ // со столбца слева до столбца справа
                         for (let k = i + 1; k >= i - shipLength; k--){ 
                             if((i - shipLength < 0) || k >= 0 && l >= 0 && k < 10 && l < 10 && field[k][l] == 1)
-                                isValidZone = false; //неоптимально, но некритично
+                                isValidZone = false;
                         }
                     }
                     if (isValidZone){ // если всё ок, то строим корабль (вверх) и недоступную зону вокруг него
@@ -150,7 +150,7 @@ function addShipToField(ship, field){
                         isShipAdded = true;
                         for (let l = j - 1; l <= j + 1; l++){ //опять идём по этим клеткам и расставляем 2 (недоступная зона)
                             for (let k = i + 1; k >= i - shipLength; k--){
-                                k >= 0 && l >= 0 && k < 10 && l < 10 && field[k][l] != 1 && (field[k][l] = 2); // наверное проверку можно убрать
+                                k >= 0 && l >= 0 && k < 10 && l < 10 && field[k][l] != 1 && (field[k][l] = 2);
                             }
                         }
                     }
@@ -169,4 +169,105 @@ function randomInteger(min, max){
     let result = Math.round(rand);
     (result == -0) && (result = 0);
     return result;
+}
+
+function setColor(id, i, j, field, isGamer){ // owner - флаг, true - поле игрока, false - компьютера. Функция, которая раскрашивает клетку, в зависимости от значения в матрице
+    if(isGamer){ // определяем на чьём поле будем устанавливать цвета
+        var elem = document.getElementById(id);
+    }
+    else{
+        var elem = document.getElementById(id + '_comp');
+    }
+    switch (true) {
+        case field[i][j] == 1: // корабль
+            if(isGamer) elem.style.backgroundColor = 'blue';
+            break;
+        case field[i][j] == 3: // промах
+            elem.style.backgroundColor = 'yellow';
+            break;
+        case field[i][j] == 4: //попадание
+            elem.style.backgroundColor = 'red';
+                break;
+    }
+}
+function startGame(){ //функция начала игры
+    var gamersName = prompt('Как вас зовут?');
+    var computerssName = prompt('Как зовут вашего соперника?');
+    isGameNow = true;
+    gamersCount = 0; //счетчики
+    computersCount = 0;
+    // window.onload = function() {
+    //     document.getElementById('gamer').innerHTML = gamersName;
+    //     document.getElementById('computer').innerHTML = computerssName;
+    // };
+    setTimeout(() => {
+        for (let i = 0; i < 10; i ++){  // расстановка кораблей Игрока
+            for (let j = 0; j < 10; j ++){
+                gamersField[i][j] == 1 && (setColor(String(i) + String(j), i, j, gamersField, true));
+            }
+        }
+    }, 600);
+
+    let isGamerFirst = random_0_or_1() == 1; //определяем, кто ходит первым
+    if(isGamerFirst){
+        alert('Вы ходите первым');
+    }
+    else{
+        alert('Компьютер ходит первым');
+        attackByComputer();
+    }
+    console.log('Игра началась');
+}
+function attack(elem){ //функция атаки Игроком (следом идёт атака Компьютером в этой же функции)
+    if(isGameNow){ //проверяем идёт ли игра (если нет, то функция не выполняется)
+        let id = elem.id;
+        id_arr = id.split('');
+        let i = id_arr[0]; //узнаем в какую клетку кликнул игрок
+        let j = id_arr[1];
+            if (computersField[i][j] == 0 || computersField[i][j] == 2){ // Пустые клетки
+                computersField[i][j] = 3; // промах
+                setColor(String(i) + String(j), i, j, computersField, false);
+            }
+            if (computersField[i][j] == 1){
+                computersField[i][j] = 4; //  попадание
+                setColor(String(i) + String(j), i, j, computersField, false);
+                gamersCount += 1;
+                if (gamersCount == 20){
+                    isGameNow = false;
+                    setTimeout(() => {
+                        alert('Вы выиграли!');
+                    }, 700);
+                    
+                }
+            }
+            if(computersField[i][j] != 4){ // если Игрок попал в палубу соперника, то компьютер не атакует на этом ходе
+                attackByComputer();
+                if (computersCount == 20){
+                    isGameNow = false;
+                    setTimeout(() => {
+                        alert('Вы проиграли');
+                    }, 400);
+                }
+            }
+    }
+    console.log('Прошла атака');
+}
+
+function attackByComputer(){ //функция атаки компьютером
+    let isAttacked = false; // переменная, которая говорит о завершении хода (если компьютер попал, то стреляет ещё раз)
+    while (!isAttacked){
+        let i = randomInteger(0, 9);
+        let j = randomInteger(0, 9);
+        // если попали в тройку или четвёрку, то идём опять по циклу While
+        if (gamersField[i][j] == 0 || gamersField[i][j] == 2){
+            gamersField[i][j] = 3; // промах
+            setColor(String(i) + String(j), i, j, gamersField, true);
+            isAttacked = true;
+        }
+        if (gamersField[i][j] == 1){
+            gamersField[i][j] = 4; //  попадание
+            setColor(String(i) + String(j), i, j, gamersField, true);
+            computersCount += 1;
+        }
+    }
 }
